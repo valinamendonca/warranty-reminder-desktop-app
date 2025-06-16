@@ -27,6 +27,7 @@ frontend/pnpm-lock.yaml
 /backend/*.log
 backend/mvnw.cmd
 backend/mvnw
+/backend/.gradle/
 
 # === ELECTRON-APP ===
 /elctron-app/node_modules/
