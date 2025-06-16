@@ -30,13 +30,13 @@ backend/mvnw
 /backend/.gradle/
 
 # === ELECTRON-APP ===
-/elctron-app/node_modules/
-/elctron-app/dist/
-/elctron-app/out/
-/elctron-app/.webpack/
-/elctron-app/*.log
-/elctron-app/.env
-/elctron-app/*.pid
+/electron-app/node_modules/
+/electron-app/dist/
+/electron-app/out/
+/electron-app/.webpack/
+/electron-app/*.log
+/electron-app/.env
+/electron-app/*.pid
 
 # === OS / Editor Specific ===
 *.swp
