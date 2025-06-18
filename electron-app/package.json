@@ -15,6 +15,11 @@
   "build": {
     "appId": "com.example.desktopapp",
     "productName": "MyDesktopApp",
+    "publish": {
+    "provider": "github",
+    "owner": "valinamendonca", 
+    "repo": "warranty-reminder-desktop-app" 
+  },
     "directories": {
       "output": "dist"
     },
