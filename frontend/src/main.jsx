@@ -3,10 +3,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import App from './App.jsx';
-import WarrantyForm from './WarrantyForm.jsx';
-import ValidWarranty from './ValidWarranty.jsx';
-import RenewalForm from './RenewalForm.jsx';
-import ViewReminders from './ViewReminders.jsx';
+import WarrantyForm from './Pages/WarrantyForm.jsx';
+import ValidWarranty from './Pages/ValidWarranty.jsx';
+import RenewalForm from './Pages/RenewalForm.jsx';
+import ViewReminders from './Pages/ViewReminders.jsx';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
