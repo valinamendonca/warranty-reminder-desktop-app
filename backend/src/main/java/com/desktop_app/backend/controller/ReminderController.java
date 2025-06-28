@@ -2,11 +2,13 @@
 package com.desktop_app.backend.controller;
 
 import com.desktop_app.backend.dto.ReminderRequest;
+import com.desktop_app.backend.dto.WarrantyResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,63 +28,59 @@ import java.util.Map;
 public class ReminderController {
 
     private static final Logger log = LoggerFactory.getLogger(ReminderController.class);
-    private final Path csvFile = Paths.get("../data/reminders.csv").toAbsolutePath().normalize();
-
-    @PostMapping
-    public ResponseEntity<String> saveReminder(@RequestBody ReminderRequest reminder) {
-
-        try {
-            // Ensure parent directories exist
-            Files.createDirectories(csvFile.getParent());
-
-            boolean fileExists = Files.exists(csvFile);
-
-            try (BufferedWriter writer = Files.newBufferedWriter(
-                    csvFile, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-
-                // Write header if file is new
-                if (!fileExists) {
-                    writer.write("Item Name,Reminder Date,Description");
-                    writer.newLine();
-                }
-
-                // Write CSV line, escaping quotes
-                writer.write(String.format("\"%s\",\"%s\",\"%s\"",
-                        reminder.getItemName(),
-                        reminder.getReminderDate(),
-                        reminder.getDescription().replace("\"", "'")));
-                writer.newLine();
-            }
-
-            log.info("Reminder saved: {}", reminder.getItemName());
-            return ResponseEntity.ok("Reminder saved successfully!");
-
-        } catch (IOException e) {
-            log.error("Error saving reminder: {}", e.getMessage());
-            return ResponseEntity.status(500).body("Error saving reminder: " + e.getMessage());
-        }
-    }
+    private final Path csvFile = Paths.get("../data/warranties.csv").toAbsolutePath().normalize();
 
     @GetMapping
-    public List<Map<String, String>> getReminders() {
-        List<Map<String, String>> reminders = new ArrayList<>();
+    public ResponseEntity<List<WarrantyResponse>> getRemindersForToday() {
+        List<WarrantyResponse> reminders = new ArrayList<>();
+
         try {
-            List<String> lines = Files.readAllLines(csvFile);
-            for (int i=1; i < lines.size(); i++) { // Skip header
-                String line = lines.get(i).trim();
-                String[] parts = line.split(",", 3);
-                if (parts.length >= 3) {
-                    Map<String, String> reminder = new HashMap<>();
-                    reminder.put("itemName", parts[0]);
-                    reminder.put("reminderDate", parts[1]);
-                    reminder.put("description", parts[2]);
-                    reminders.add(reminder);
+            if (!Files.exists(csvFile)) {
+                return ResponseEntity.ok(reminders);
+            }
+
+            LocalDate today = LocalDate.now();
+
+            try (BufferedReader reader = Files.newBufferedReader(csvFile)) {
+                String line;
+                boolean skipHeader = true;
+
+                while ((line = reader.readLine()) != null) {
+                    if (skipHeader) {
+                        skipHeader = false;
+                        continue;
+                    }
+
+                    String[] parts = parseCSVLine(line);
+                    if (parts.length < 6) continue;
+
+                    String id = parts[0].replaceAll("^\"|\"$", "");
+                    String itemName = parts[1];
+                    String expiryDateStr = parts[2].replaceAll("^\"|\"$", "");
+                    String description = parts[3];
+                    String category = parts[4].replaceAll("^\"|\"$", "");
+                    String reminderStr = parts[5].replaceAll("^\"|\"$", "");
+
+                    boolean reminder = reminderStr.equalsIgnoreCase("true");
+
+                    if (reminder) {
+                        LocalDate expiryDate = LocalDate.parse(expiryDateStr);
+                        if (expiryDate.equals(today)) {
+                            reminders.add(new WarrantyResponse(id, itemName, expiryDateStr, description, category, true));
+                        }
+                    }
                 }
             }
+
+            return ResponseEntity.ok(reminders);
         } catch (IOException e) {
-            e.printStackTrace();
+            return ResponseEntity.status(500).build();
         }
-        log.info("Retrieved {} reminders", reminders.size());
-        return reminders;
     }
+
+    // Helper to correctly split a CSV line, respecting commas inside quotes
+    private String[] parseCSVLine(String line) {
+        return line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)", -1); // Regex to split outside quotes
+    }
+
 }

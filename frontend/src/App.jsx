@@ -19,28 +19,13 @@ function App() {
               ➕ Add Item Warranty
             </button>
           </Link>
-          <Link to="/valid-warranty" className="w-full sm:w-auto">
+          <Link to="/categories" className="w-full sm:w-auto">
             <button className="w-full sm:w-auto bg-green-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition duration-300">
               ✅ View Valid Warranties
             </button>
           </Link>
         </div>
-
-        {/* Second Row */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
-          <Link to="/renewal-reminder" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto bg-green-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition duration-300">
-              ✅ Set a Renewal Reminder
-            </button>
-          </Link>
-          <Link to="/reminders" className="w-full sm:w-auto">
-            <button className="w-full sm:w-auto bg-green-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-green-700 transition duration-300">
-              ✅ View All Reminders
-            </button>
-          </Link>
-        </div>
       </div>
-
       </div>
     </div>
   );

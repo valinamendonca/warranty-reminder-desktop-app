@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import BackToHome from '../Components/BackToHome';
 
 const ValidWarranty = () => {
   const [warranties, setWarranties] = useState([]);
@@ -58,15 +59,7 @@ const ValidWarranty = () => {
             ))}
           </div>
         )}
-
-        <div className="text-center mt-12">
-          <Link
-            to="/"
-            className="inline-block text-blue-600 font-semibold hover:underline hover:text-blue-800 transition"
-          >
-            ← Back to Home
-          </Link>
-        </div>
+        <BackToHome/>
       </div>
     </div>
   );
