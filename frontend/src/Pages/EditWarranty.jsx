@@ -1,11 +1,14 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export default function EditWarranty() {
   const location = useLocation();
   const navigate = useNavigate();
+
   const item = location.state?.item;
 
+  const itemNameRef = useRef(null);
+  
   const [id, setId] = useState(item?.id || '');
   const [itemName, setItemName] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -14,6 +17,26 @@ export default function EditWarranty() {
   const [reminder, setReminder] = useState(false);
 
   useEffect(() => {
+    const handleWindowFocus = () => {
+      if (itemNameRef.current) {
+        itemNameRef.current.focus();
+      }
+    };
+
+    window.addEventListener('focus', handleWindowFocus);
+
+    // Optionally focus right away if the window is already focused
+    if (document.hasFocus()) {
+      handleWindowFocus();
+    }
+
+    return () => {
+      window.removeEventListener('focus', handleWindowFocus);
+    };
+  }, []);
+
+  useEffect(() => {
+
     if (item) {
       setId(item.id);
       setItemName(item.itemName);
@@ -22,6 +45,7 @@ export default function EditWarranty() {
       setCategory(item.category?.replace(/"/g, '') || '');
       setReminder(item.reminder?.toString().toLowerCase() === 'true');
     }
+
   }, [item]);
 
   if (!item) {
@@ -55,14 +79,25 @@ export default function EditWarranty() {
       <div className="w-full max-w-xl bg-white p-8 rounded-2xl shadow-xl">
         <h2 className="text-3xl font-extrabold text-blue-800 text-center mb-6">✏️ Edit Warranty</h2>
         <form onSubmit={handleUpdate} className="space-y-5">
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Item Name</label>
+          <div className="form-wrapper" style={{ WebkitAppRegion: 'no-drag' }}>
+            <label className="block text-gray-700 font-semibold mb-1" htmlFor='itemName'>Item Name</label>
+            <div className="relative z-50 pointer-events-auto" style={{ WebkitAppRegion: 'no-drag' }}>
             <input
-              className="w-full px-4 py-2 border border-gray-300 rounded-xl"
+              className="w-full px-4 py-2 border border-gray-300 rounded-xl pointer-events-auto"
+              style={{ zIndex: 10, position: 'relative', WebkitAppRegion: 'no-drag' }}
+              id='itemName'
+              ref={itemNameRef}
+              onClick={(e) => {
+                console.log("Input clicked", e);
+                itemNameRef.current?.focus();
+                console.log("Focused:", document.activeElement === itemNameRef.current);
+              }}
+              onFocus={() => console.log("Input focused")}
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
               required
             />
+            </div>
           </div>
           <div>
             <label className="block text-gray-700 font-semibold mb-1">Expiry Date</label>
@@ -74,10 +109,12 @@ export default function EditWarranty() {
               required
             />
           </div>
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Description</label>
+          <div className="form-wrapper" style={{ WebkitAppRegion: 'no-drag' }}>
+            <label className="block text-gray-700 font-semibold mb-1" htmlFor='desc'>Description</label>
             <textarea
               className="w-full px-4 py-2 border border-gray-300 rounded-xl"
+              style={{ zIndex: 10, position: 'relative' }}
+              id='desc'
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import BackToHome from '../Components/BackToHome';
@@ -11,6 +11,10 @@ function WarrantyForm() {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [reminder, setReminder] = useState(false);
+
+  useEffect(() => {
+    window.location.reload();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,10 +46,12 @@ function WarrantyForm() {
           📝 Add a New Warranty
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Item Name</label>
+          <div className="form-wrapper" style={{ WebkitAppRegion: 'no-drag' }}>
+            <label className="block text-gray-700 font-semibold mb-1" htmlFor='itemName'>Item Name</label>
             <input
               className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              style={{ zIndex: 10, position: 'relative' }}
+              id='itemName'
               placeholder="e.g. TV, Fridge, Insurance"
               value={itemName}
               onChange={(e) => setItemName(e.target.value)}
@@ -82,10 +88,12 @@ function WarrantyForm() {
             />
           </div>
 
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Description</label>
+          <div className="form-wrapper" style={{ WebkitAppRegion: 'no-drag' }}>
+            <label className="block text-gray-700 font-semibold mb-1" htmlFor='desc'>Description</label>
             <textarea
               className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              style={{ zIndex: 10, position: 'relative' }}
+              id='desc'
               placeholder="Brief description of the product or warranty"
               value={description}
               onChange={(e) => setDescription(e.target.value)}

@@ -42,11 +42,15 @@ function createWindow() {
     width: 1000,
     height: 700,
     show: false,
+    transparent: false,
+    frame: true,
+    backgroundColor: '#ffffff',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
       webSecurity: false,
     },
+    focusable: true,
   });
 
   mainWindow.loadURL(`file://${path.join(__dirname, 'frontend', 'dist', 'index.html')}`);
