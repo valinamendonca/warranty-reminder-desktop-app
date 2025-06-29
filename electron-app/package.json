@@ -1,6 +1,6 @@
 {
   "name": "desktop-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A desktop application built with Electron",
   "author": "Valina Mendonca",
   "main": "main.js",
