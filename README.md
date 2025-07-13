@@ -1,37 +1,162 @@
-# warranty-reminder-desktop-app
-A desktop application used to keep a list of your item warranties and set renewal reminders.
+# 📦 Warranty Reminder App
 
+A cross-platform desktop app to track your warranties and get timely reminders — built using **React**, **Spring Boot**, and **Electron**.
 
-#Edit this later
+---
 
+## 🚀 Features
 
-#Temporary details
+- Add and edit warranty records
+- Set reminders for expiry dates
+- Works offline as a desktop app
+- Auto-launch on system startup
+- In-app update support via GitHub
 
-warranty-reminder-app
+---
 
-for locally running,
-cd frontend -> npm run dev
-cd backend -> run the app
+## 🛠️ Local Development
 
-for desktop feel, (while running in electron, frontend and backend need not run)
-cd electron -> npm start
+### 1. Run Frontend
 
-for deploying as a package,
-cd frontend -> npm run build
-copy the dist folder and paste to electron/frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-cd backend -> build the project -> copy the jar file created under build/libs/jar file and paste to electron/app
+Visit: [http://localhost:5173](http://localhost:5173)
 
-cd electron -> npm run dist
-This creates a .exec inside the electron-app/dist
+### 2. Run Backend
 
-To update the version
-Mkae your changes
-in electron-app/package.json, change the version
-then run, npm run dist -- --publish=always
-(If app not automatically uploaded then go to repo, release -> draft new release, add a tag v1.0.1
-Upload the .exe and latest.yml
-publish
+```bash
+cd backend
+./gradlew bootRun
+```
 
-github access token
-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
+You can also run it from your IDE (IntelliJ).
+
+---
+
+## 🖥️ Electron Desktop App
+
+> ⚠️ No need to run frontend/backend separately — Electron handles everything.
+
+### Run Electron App
+
+```bash
+cd electron
+npm install
+npm start
+```
+
+To reflect any **changes**, follow the two steps below:
+
+---
+
+## 🔁 Reflect Changes in Electron App
+
+### 1. Rebuild Frontend for Electron
+
+```bash
+cd frontend
+npm run build
+```
+
+Then copy the generated `dist` folder to:
+
+```
+electron/frontend/
+```
+
+### 2. Rebuild Backend for Electron
+
+Build the backend JAR:
+
+```bash
+cd backend
+./gradlew build
+```
+
+Then copy:
+
+```
+backend/build/libs/backend-0.0.1-SNAPSHOT.jar
+```
+
+Paste it into:
+
+```
+electron/app/
+```
+
+---
+
+## 📦 Build Installer for Distribution
+
+```bash
+cd electron
+npm run dist
+```
+
+This will create a `.exe` and `latest.yml` inside:
+
+```
+electron/dist/
+```
+
+---
+
+## 🔄 Auto-Update Support
+
+### Update App Version
+
+1. Bump the version in `electron/package.json`:
+
+```json
+"version": "1.0.1"
+```
+
+2. Run publish command:
+
+```bash
+cd electron
+npm run dist -- --publish=always
+```
+
+### Manual GitHub Release (if auto-upload fails)
+
+- Go to your GitHub repo → **Releases**
+- Click **"Draft new release"**
+- Tag the release (e.g., `v1.0.1`)
+- Upload:
+  - `.exe` file from `electron/dist/`
+  - `latest.yml` from `electron/dist/`
+- Click **Publish**
+
+Your users will now receive the update automatically.
+
+---
+
+## 🗂 Project Structure
+
+```
+warranty-reminder-app/
+├── backend/       # Spring Boot backend
+├── frontend/      # React + Tailwind frontend
+├── electron/      # Electron wrapper
+│   ├── app/       # Contains backend JAR
+│   └── frontend/  # Contains built frontend
+```
+
+---
+
+## 🧠 Notes
+
+- Electron auto-update works only for **public GitHub repos** or via authenticated release management.
+- Don't forget to disable `webSecurity` only for development.
+
+---
+
+## 🙌 Contributions
+
+Pull requests and issue reports are welcome!
